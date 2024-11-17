@@ -5,6 +5,8 @@ const mongoose = require("mongoose")
 
 mongoose.connect(config.connectionString);
 
+const User = require("./models/user.model");
+
 const express = require("express")
 const cors = require("cors")
 const app = express();
@@ -47,10 +49,10 @@ app.post("/create-account", async(req,res) => {
 
     const isUser = await User.findOne({email: email});
 
-    if (!isUser){
+    if (isUser){
         return res.json({
             error:true,
-            message: "User already exists"
+            message: "User already exists",
         });
     }
 
@@ -65,7 +67,7 @@ app.post("/create-account", async(req,res) => {
     await user.save();
 
     const accessToken = jwt.sign({user}, process.env.ACCESS_TOKEN_SECRET,{
-        expiresIn: "1h",
+        expiresIn: "3600m",
     });
 
     return res.json({
