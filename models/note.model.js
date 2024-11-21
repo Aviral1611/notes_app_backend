@@ -7,9 +7,9 @@ const noteSchema = new Schema({
     },
     content: {type: String, required: true
     },
-    tags: {type: Boolean, default: []
+    tags: { type: [String], default: []
     },
-    isPinned : { type: Boolean, required: true
+    isPinned : { type: Boolean, required: false
     },
     userId : {type:String, required: true
     },
