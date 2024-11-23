@@ -27,6 +27,9 @@ app.get("/",(req,res) => {
     res.json({data: "hello"})
 });
 
+
+// Backend
+
 //Create Account
 app.post("/create-account", async(req,res) => {
     const {fullName, email,password} = req.body;
@@ -116,6 +119,29 @@ app.post("/login", async (req,res) => {
         });
     }
 
+});
+
+// Get User
+app.post("/get-user",authenticateToken, async (req,res) => {
+    const {user} = req.user;
+
+    const isUser = await User.findOne({_id: user._id})
+
+    if (!isUser){
+        return res.status(400)
+        .json({error: true, message: "User not found"})
+    }
+
+    return res.json({
+        error: false,
+        message: "User found",
+        user: {
+            fullName: isUser.fullName,
+            email: isUser.email,
+            "_id": isUser._id,
+            createdOn: isUser.createdOn,
+        }
+    });
 });
 
 // Add note
